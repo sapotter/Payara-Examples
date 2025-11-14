@@ -1,0 +1,48 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="jakarta.faces.facelets"
+                xmlns:f="jakarta.faces.core"
+                xmlns:h="jakarta.faces.html"
+                template="/WEB-INF/layout/template.xhtml">
+
+    <ui:define name="content">
+        <h3>Librarian</h3>
+        <p>Represents librarians managing the library.</p>
+        <h:panelGrid columns="2" columnClasses="label,value" styleClass="table-form">
+
+            <h:outputLabel for="librarianID" value="Librarian ID:" />
+            <h:inputText id="librarianID" value="#{librarianBean.librarian.librarianID}" />
+
+            <h:outputLabel for="name" value="Name:" />
+            <h:inputText id="name" value="#{librarianBean.librarian.name}" />
+
+            <h:outputLabel for="department" value="Department:" />
+            <h:inputText id="department" value="#{librarianBean.librarian.department}" />
+        </h:panelGrid>
+
+        <h:commandButton value="Save" action="#{librarianBean.save}" styleClass="btn btn-primary mt-3" />
+
+        <h3 class="mt-5">Librarian List</h3>
+        <h:dataTable value="#{librarianBean.allLibrarians}" var="librarian" border="1" styleClass="table table-striped table-bordered">
+            <h:column>
+                <f:facet name="header">Librarian ID</f:facet>
+                #{librarian.librarianID}
+            </h:column>
+            <h:column>
+                <f:facet name="header">Name</f:facet>
+                #{librarian.name}
+            </h:column>
+            <h:column>
+                <f:facet name="header">Department</f:facet>
+                #{librarian.department}
+            </h:column>
+            <h:column>
+                <f:facet name="header">Actions</f:facet>
+                <h:commandLink value="Edit" action="#{librarianBean.edit(librarian)}" styleClass="btn btn-link p-0" />
+                |
+                <h:commandLink value="Delete" action="#{librarianBean.remove(librarian.librarianID)}"
+                               onclick="return confirm('Delete this librarian?');" 
+                               styleClass="btn btn-link p-0 text-danger" />
+            </h:column>
+        </h:dataTable>
+    </ui:define>
+</ui:composition>
