@@ -1,0 +1,57 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="jakarta.faces.facelets"
+                xmlns:f="jakarta.faces.core"
+                xmlns:h="jakarta.faces.html"
+                template="/WEB-INF/layout/template.xhtml">
+
+    <ui:define name="content">
+        <h3>Book</h3>
+        <p>Represents books available in the library.</p>
+        <h:panelGrid columns="2" columnClasses="label,value" styleClass="table-form">
+
+            <h:outputLabel for="isbn" value="Isbn:" />
+            <h:inputText id="isbn" value="#{bookBean.book.isbn}" />
+
+            <h:outputLabel for="title" value="Title:" />
+            <h:inputText id="title" value="#{bookBean.book.title}" />
+
+            <h:outputLabel for="author" value="Author:" />
+            <h:inputText id="author" value="#{bookBean.book.author}" />
+
+            <h:outputLabel for="pages" value="Pages:" />
+            <h:inputText id="pages" value="#{bookBean.book.pages}" >
+                <f:passThroughAttribute name="type" value="number" />
+            </h:inputText>
+        </h:panelGrid>
+
+        <h:commandButton value="Save" action="#{bookBean.save}" styleClass="btn btn-primary mt-3" />
+
+        <h3 class="mt-5">Book List</h3>
+        <h:dataTable value="#{bookBean.allBooks}" var="book" border="1" styleClass="table table-striped table-bordered">
+            <h:column>
+                <f:facet name="header">Isbn</f:facet>
+                #{book.isbn}
+            </h:column>
+            <h:column>
+                <f:facet name="header">Title</f:facet>
+                #{book.title}
+            </h:column>
+            <h:column>
+                <f:facet name="header">Author</f:facet>
+                #{book.author}
+            </h:column>
+            <h:column>
+                <f:facet name="header">Pages</f:facet>
+                #{book.pages}
+            </h:column>
+            <h:column>
+                <f:facet name="header">Actions</f:facet>
+                <h:commandLink value="Edit" action="#{bookBean.edit(book)}" styleClass="btn btn-link p-0" />
+                |
+                <h:commandLink value="Delete" action="#{bookBean.remove(book.isbn)}"
+                               onclick="return confirm('Delete this book?');" 
+                               styleClass="btn btn-link p-0 text-danger" />
+            </h:column>
+        </h:dataTable>
+    </ui:define>
+</ui:composition>

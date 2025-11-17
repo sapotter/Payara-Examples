@@ -1,0 +1,100 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="jakarta.faces.facelets"
+                xmlns:f="jakarta.faces.core"
+                xmlns:h="jakarta.faces.html"
+                template="/WEB-INF/layout/template.xhtml">
+
+    <ui:define name="content">
+        <h3>Loan</h3>
+        <p>Represents the loan of a book to a patron.</p>
+        <h:panelGrid columns="2" columnClasses="label,value" styleClass="table-form">
+
+            <h:outputLabel for="loanDate" value="Loan Date:" />
+            <h:inputText id="loanDate" 
+                         value="#{loanBean.loan.loanDate}" 
+                         converter="localDateTimeConverter">
+                <f:passThroughAttribute name="type" value="datetime-local" />
+            </h:inputText>
+
+            <h:outputLabel for="returnDate" value="Return Date:" />
+            <h:inputText id="returnDate" 
+                         value="#{loanBean.loan.returnDate}" 
+                         converter="localDateTimeConverter">
+                <f:passThroughAttribute name="type" value="datetime-local" />
+            </h:inputText>
+
+            <h:outputLabel for="librarian" value="Librarian:" />
+            <h:selectOneMenu id="librarian"
+                             value="#{loanBean.loan.librarian}"
+                             converter="librarianConverter">
+                <f:selectItem itemLabel="Select Librarian" noSelectionOption="true" />
+                <f:selectItems value="#{librarianBean.allLibrarians}"
+                               var="librarian"
+                               itemValue="#{librarian}"
+                               itemLabel="#{librarian}" />
+            </h:selectOneMenu>
+
+            <h:outputLabel for="patron" value="Patron:" />
+            <h:selectOneMenu id="patron"
+                             value="#{loanBean.loan.patron}"
+                             converter="patronConverter">
+                <f:selectItem itemLabel="Select Patron" noSelectionOption="true" />
+                <f:selectItems value="#{patronBean.allPatrons}"
+                               var="patron"
+                               itemValue="#{patron}"
+                               itemLabel="#{patron}" />
+            </h:selectOneMenu>
+
+            <h:outputLabel for="book" value="Book:" />
+            <h:selectOneMenu id="book"
+                             value="#{loanBean.loan.book}"
+                             converter="bookConverter">
+                <f:selectItem itemLabel="Select Book" noSelectionOption="true" />
+                <f:selectItems value="#{bookBean.allBooks}"
+                               var="book"
+                               itemValue="#{book}"
+                               itemLabel="#{book}" />
+            </h:selectOneMenu>
+        </h:panelGrid>
+        <h:inputHidden id="loanID" 
+                       value="#{loanBean.loan.loanID}" />
+
+        <h:commandButton value="Save" action="#{loanBean.save}" styleClass="btn btn-primary mt-3" />
+
+        <h3 class="mt-5">Loan List</h3>
+        <h:dataTable value="#{loanBean.allLoans}" var="loan" border="1" styleClass="table table-striped table-bordered">
+            <h:column>
+                <f:facet name="header">Loan ID</f:facet>
+                #{loan.loanID}
+            </h:column>
+            <h:column>
+                <f:facet name="header">Loan Date</f:facet>
+                #{loan.loanDate}
+            </h:column>
+            <h:column>
+                <f:facet name="header">Return Date</f:facet>
+                #{loan.returnDate}
+            </h:column>
+            <h:column>
+                <f:facet name="header">Librarian</f:facet>
+                #{loan.librarian}
+            </h:column>
+            <h:column>
+                <f:facet name="header">Patron</f:facet>
+                #{loan.patron}
+            </h:column>
+            <h:column>
+                <f:facet name="header">Book</f:facet>
+                #{loan.book}
+            </h:column>
+            <h:column>
+                <f:facet name="header">Actions</f:facet>
+                <h:commandLink value="Edit" action="#{loanBean.edit(loan)}" styleClass="btn btn-link p-0" />
+                |
+                <h:commandLink value="Delete" action="#{loanBean.remove(loan.loanID)}"
+                               onclick="return confirm('Delete this loan?');" 
+                               styleClass="btn btn-link p-0 text-danger" />
+            </h:column>
+        </h:dataTable>
+    </ui:define>
+</ui:composition>
